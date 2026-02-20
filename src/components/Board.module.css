@@ -1,0 +1,38 @@
+.message {
+    color: gold;
+    font-size: 18px;
+    text-align: center;
+    margin-top: -20px;
+    margin-bottom: 10px;
+}
+
+.boardGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 120px);
+    gap: 2spx;
+}
+
+.boardCell {
+    width: 120px;
+    height: 120px;
+    font-size: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+}
+
+.winningSquare  {
+    background-color: red;
+}
+
+.resetBtn {
+    position: absolute;
+    bottom: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    border: 2px solid white;
+    background-color: black;
+}

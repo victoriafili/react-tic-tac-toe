@@ -1,0 +1,44 @@
+.scoreBoard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    margin-top: 20px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 2px solid white;    
+}
+
+.playerBox {
+  text-align: center;
+  min-width: 80px;
+}
+
+.playerX {
+    color: white;
+    margin: 0;
+}
+
+.playerXScore {
+    color: white;
+    font-size: 20px;
+    margin: 0;
+}
+
+.scoreBoardDivider {
+    width: 2px;
+    height: 40px;
+    background-color: white;
+}
+
+.playerO {
+    color: white;
+    margin: 0;
+}
+
+.playerOScore {
+    color: white;
+    font-size: 20px;
+    margin: 0;
+}

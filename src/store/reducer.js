@@ -1,9 +1,9 @@
 import { playMove, resetBoard } from "./actions";
 
-const initState = {board: Array(9).fill(null), isNext: true, score: {
+const initState = {board: Array(9).fill(null), isNext: true, winner: null, score: {
     X: 0,
     O: 0,
-}}
+}, matchWinner: null, message: "",}
 
 const reducer = (state = initState, action) => {
     switch (action.type) {
@@ -11,23 +11,59 @@ const reducer = (state = initState, action) => {
             return {...state, board: action.payload};
         case 'SET_NEXT_PLAYER':
             return {...state, isNext: action.payload};
-        case resetBoard.type:
-            return { board: Array(9).fill(null), isNext: true, score: state.score, winningLine: null, winner: null };
+        case resetBoard.type: {
+            // Check if matchWinner exists
+            const isMatchOver = state.matchWinner !== null;
+
+            return { 
+                board: Array(9).fill(null), 
+                isNext: true, 
+                winningLine: null, 
+                winner: null, 
+                matchWinner: isMatchOver ? null : state.matchWinner,   // keep matchWinner if match not over
+                message: isMatchOver ? "" : state.message,            // clear message only if match over
+                score: isMatchOver ? { X: 0, O: 0 } : state.score,   // reset score only if match over
+            };
+        }
         case playMove.type: {
             const newBoard = [...state.board];
+
+            if (newBoard[action.payload] || state.winner) return state;
+
             newBoard[action.payload] = state.isNext ? 'X' : 'O';
 
             const winner = calculateWinner(newBoard);
 
-            if (winner) {
-                return {...state, board: newBoard, isNext: !state.isNext, winner: winner.winner, winningLine: winner.line, score: {
-                    ...state.score,
-                    X: winner.winner === 'X' ? state.score.X + 1 : state.score.X,
-                    O: winner.winner === 'O' ? state.score.O + 1 : state.score.O,
-                }};
+            if (!winner) {
+                return {
+                    ...state,
+                    board: newBoard,
+                    isNext: !state.isNext,
+                };
             }
 
-            return {...state, board: newBoard, isNext: !state.isNext};
+            const updatedScore = {
+                ...state.score,
+                X: winner.winner === 'X' ? state.score.X + 1 : state.score.X,
+                O: winner.winner === 'O' ? state.score.O + 1 : state.score.O,
+            };
+
+            const matchWinner = updatedScore.X === 3 ? 'X' : updatedScore.O === 3 ? 'O' : null;
+
+            if (matchWinner) {
+                return {
+                    ...state,
+                    board: newBoard,
+                    isNext: !state.isNext,
+                    winner: winner.winner,
+                    winningLine: winner.line,
+                    matchWinner: matchWinner,
+                    score: updatedScore,
+                    message: `Player ${matchWinner} wins the match!`,
+                }
+            }
+
+            return {...state, board: newBoard, isNext: !state.isNext, winner: winner.winner, winningLine: winner.line, score: updatedScore};
         }
         default:
             return state;
