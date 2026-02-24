@@ -1,20 +1,13 @@
 import {createStore} from 'redux';
 import reducer from './reducer';
-//import { applyMiddleware } from 'redux';
+import { loadState, savedState } from "./persist";
 
-// export const loggerMiddleware = (store) => (next) => (action) => {
-//   console.log("----- REDUX ACTION -----");
-//   console.log("Prev state:", store.getState());
-//   console.log("Action:", action);
+const persistedState = loadState();
 
-//   const result = next(action);
+const store = createStore(reducer, persistedState);
 
-//   console.log("Next state:", store.getState());
-//   console.log("------------------------");
-
-//   return result;
-// };
-
-const store = createStore(reducer);
+store.subscribe(() => {
+    savedState(store.getState());
+});
 
 export default store;

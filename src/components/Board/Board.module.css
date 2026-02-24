@@ -26,13 +26,21 @@
     background-color: red;
 }
 
+.buttonContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 360px; 
+}
+
+.nextBtn,
 .resetBtn {
-    position: absolute;
-    bottom: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 8px;
-    border: 2px solid white;
-    background-color: black;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 2px solid white;
+  background: black;
+  color: white;
+  cursor: pointer;
 }

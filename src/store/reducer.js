@@ -1,4 +1,4 @@
-import { playMove, resetBoard } from "./actions";
+import { playMove, resetBoard, nextRound } from "./actions";
 
 const initState = {board: Array(9).fill(null), isNext: true, winner: null, score: {
     X: 0,
@@ -11,9 +11,22 @@ const reducer = (state = initState, action) => {
             return {...state, board: action.payload};
         case 'SET_NEXT_PLAYER':
             return {...state, isNext: action.payload};
+        case nextRound.type:
+            if (state.matchWinner) return state; // Prevent starting next round if match is already won
+
+            return {
+                ...state,
+                board: Array(9).fill(null),
+                isNext: true,
+                winner: null,
+                winningLine: null,
+            };
         case resetBoard.type: {
             // Check if matchWinner exists
             const isMatchOver = state.matchWinner !== null;
+
+            // If no match winner yet -> do nothing
+            if (!state.matchWinner) return state;
 
             return { 
                 board: Array(9).fill(null), 

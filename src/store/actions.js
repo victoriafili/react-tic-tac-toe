@@ -5,4 +5,5 @@ const createAction = (type) => {
 }
 
 export const playMove = createAction('PLAY_MOVE');
+export const nextRound = createAction('NEXT_ROUND');
 export const resetBoard = createAction('RESET_BOARD');

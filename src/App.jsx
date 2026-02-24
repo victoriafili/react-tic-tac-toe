@@ -1,5 +1,5 @@
-import Board from './components/Board';
-import ScoreBoard from './components/Scoreboard';
+import Board from './components/Board/Board';
+import ScoreBoard from './components/Scoreboard/ScoreBoard';
 import styles from './App.module.css';
 
 // Main App component

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { playMove, resetBoard } from '../store/actions';
+import { playMove, resetBoard, nextRound } from '../../store/actions';
 import styles from './Board.module.css';
 
 function Board () {
@@ -41,16 +41,25 @@ function Board () {
           )
         })}
       </div>
+      
+      <div className={styles.buttonContainer}>
+        <button 
+          onClick={() => dispatch(nextRound())}
+          className={styles.nextBtn}
+        >
+          Next Round
+        </button>
 
-      <button 
-        onClick={() => dispatch(resetBoard())}
-        className={styles.resetBtn}
-      >
-        Reset Game
-      </button>
+        <button 
+          onClick={() => dispatch(resetBoard())}
+          className={styles.resetBtn}
+        >
+          Reset Game
+        </button>
+      </div>
 
     </div>
   );
 }
 
-export default Board
+export default Board;
