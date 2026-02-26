@@ -1,5 +1,6 @@
 .message {
-    color: gold;
+    color: white;
+    font-weight: bold;
     font-size: 18px;
     text-align: center;
     margin-top: -20px;

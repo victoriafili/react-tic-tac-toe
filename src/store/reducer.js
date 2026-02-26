@@ -7,6 +7,8 @@ const initState = {board: Array(9).fill(null), isNext: true, winner: null, score
 
 const reducer = (state = initState, action) => {
     switch (action.type) {
+        case 'LOAD_STATE':
+            return action.payload;
         case 'UPDATE_BOARD':
             return {...state, board: action.payload};
         case 'SET_NEXT_PLAYER':

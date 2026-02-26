@@ -3,9 +3,12 @@ import { playMove, resetBoard, nextRound } from '../../store/actions';
 import styles from './Board.module.css';
 
 function Board () {
-  const board = useSelector(state => state.board);
-  const winningLine = useSelector(state => state.winningLine);
-  const message = useSelector(state => state.message);
+  const state = useSelector(state => state);
+  const board = state?.board || Array(9).fill(null);
+  console.log("Board state:", state);
+  const winningLine = state.winningLine;
+  const message = state.message;
+  const matchWinner = state.matchWinner;
   const dispatch = useDispatch();
 
   const handleClick = (i) => {
@@ -50,12 +53,14 @@ function Board () {
           Next Round
         </button>
 
-        <button 
-          onClick={() => dispatch(resetBoard())}
-          className={styles.resetBtn}
-        >
-          Reset Game
-        </button>
+        {matchWinner && (
+          <button 
+            onClick={() => dispatch(resetBoard())}
+            className={styles.resetBtn}
+          >
+            Play Again
+          </button>
+        )}
       </div>
 
     </div>
