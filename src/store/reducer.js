@@ -1,9 +1,9 @@
 import { playMove, resetBoard, nextRound } from "./actions";
 
-const initState = {board: Array(9).fill(null), isNext: true, winner: null, score: {
+const initState = {board: Array(9).fill(null), winner: null, score: {
     X: 0,
     O: 0,
-}, matchWinner: null, message: "",}
+}, matchWinner: null, message: "", currentTurn: "X",}
 
 const reducer = (state = initState, action) => {
     switch (action.type) {
@@ -12,14 +12,14 @@ const reducer = (state = initState, action) => {
         case 'UPDATE_BOARD':
             return {...state, board: action.payload};
         case 'SET_NEXT_PLAYER':
-            return {...state, isNext: action.payload};
+            return {...state, currentTurn: action.payload};
         case nextRound.type:
             if (state.matchWinner) return state; // Prevent starting next round if match is already won
 
             return {
                 ...state,
                 board: Array(9).fill(null),
-                isNext: true,
+                currentTurn: "X",
                 winner: null,
                 winningLine: null,
             };
@@ -32,7 +32,7 @@ const reducer = (state = initState, action) => {
 
             return { 
                 board: Array(9).fill(null), 
-                isNext: true, 
+                currentTurn: "X", 
                 winningLine: null, 
                 winner: null, 
                 matchWinner: isMatchOver ? null : state.matchWinner,   // keep matchWinner if match not over
@@ -40,20 +40,28 @@ const reducer = (state = initState, action) => {
                 score: isMatchOver ? { X: 0, O: 0 } : state.score,   // reset score only if match over
             };
         }
-        case playMove.type: {
+        case playMove.type: {           
             const newBoard = [...state.board];
 
-            if (newBoard[action.payload] || state.winner) return state;
+             if (newBoard[action.payload] ||
+                state.winner ||
+                action.meta?.player !== state.currentTurn
+             ){
+                return state;
+             }
 
-            newBoard[action.payload] = state.isNext ? 'X' : 'O';
+            newBoard[action.payload] = state.currentTurn;
 
             const winner = calculateWinner(newBoard);
+
+            // Flip turn
+            const nextTurn = state.currentTurn === "X" ? "O" : "X";
 
             if (!winner) {
                 return {
                     ...state,
                     board: newBoard,
-                    isNext: !state.isNext,
+                    currentTurn: nextTurn,
                 };
             }
 
@@ -69,7 +77,7 @@ const reducer = (state = initState, action) => {
                 return {
                     ...state,
                     board: newBoard,
-                    isNext: !state.isNext,
+                    currentTurn: nextTurn,
                     winner: winner.winner,
                     winningLine: winner.line,
                     matchWinner: matchWinner,
@@ -78,7 +86,7 @@ const reducer = (state = initState, action) => {
                 }
             }
 
-            return {...state, board: newBoard, isNext: !state.isNext, winner: winner.winner, winningLine: winner.line, score: updatedScore};
+            return {...state, board: newBoard, currentTurn: nextTurn, winner: winner.winner, winningLine: winner.line, score: updatedScore};
         }
         default:
             return state;

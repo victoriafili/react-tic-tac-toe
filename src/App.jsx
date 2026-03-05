@@ -1,34 +1,23 @@
 import Board from './components/Board/Board';
 import ScoreBoard from './components/ScoreBoard/ScoreBoard';
+import { assignPlayer } from './multiplayer/playerManager';
 import styles from './App.module.css';
-
-import { useState, useSelector, useDispatch } from 'react-redux';
-import {useEffect} from 'react';
-
-const channel = new BroadcastChannel('tic-tac-toe');
+import { useSelector, useDispatch } from 'react-redux';
+import { useState } from 'react';
 
 // Main App component
 export default function App() { 
-  const state = useSelector(state => state)
-  const dispatch = useDispatch()
+  const [currPlayer] = useState(assignPlayer());
 
-  // Post state to other tabs
-  useEffect(() => {
-    channel.postMessage(state);
-  }, [state]);
-
-  // Listen for messages from other tabs
-  useEffect(() => {
-    channel.onmessage = (event) => {
-      dispatch({ type: "LOAD_STATE", payload: event.data });
-    };
-  }, [dispatch]);
-
+  const state = useSelector(state => state);
+  const dispatch = useDispatch();
+  
   return (
     <div className = {styles.app}>
       <h1 className = {styles.h1}>Tic Tac Toe</h1> 
-      <ScoreBoard />
-      <Board />
+      <p>You are Player: {currPlayer}</p>
+      <ScoreBoard state={state}/>
+      <Board dispatch={dispatch} state={state} currPlayer={currPlayer} />
     </div>
   )
 }

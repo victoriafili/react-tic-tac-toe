@@ -1,22 +1,27 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { playMove, resetBoard, nextRound } from '../../store/actions';
+import {resetBoard, nextRound } from '../../store/actions';
 import styles from './Board.module.css';
 
-function Board () {
-  const state = useSelector(state => state);
-  const board = state?.board || Array(9).fill(null);
-  console.log("Board state:", state);
+function Board ({dispatch, state}) {
+  const board = state?.board || Array(9).fill(null); // Prevents crash if state temporarily undefined / Avoids black screen
+  
   const winningLine = state.winningLine;
   const message = state.message;
   const matchWinner = state.matchWinner;
-  const dispatch = useDispatch();
+  const currPlayer = state.currentTurn;
+  const tabRole = currPlayer; // X, O
+  const currentTurn = state.currentTurn;
 
   const handleClick = (i) => {
-    if (board[i] || winningLine?.length) return;
-    
-    dispatch(playMove(i));
-    return;
-  }
+    if (
+      state.board[i] ||
+      state.winner ||
+      tabRole !== currentTurn
+    ) {
+      return;
+    }
+
+    dispatch({ type: "PLAY_MOVE", payload: i, meta: { player: tabRole } });
+  };
 
   return (
     <div>

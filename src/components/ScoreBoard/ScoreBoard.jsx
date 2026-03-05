@@ -1,9 +1,7 @@
-import { useSelector } from "react-redux"
 import styles from "./Scoreboard.module.css"
 
-function ScoreBoard() {
-    const score = useSelector(state => state.score)
-
+function ScoreBoard({state}) {
+    const score = state.score;
     return (
         <div className={styles.scoreBoard}>
             {/* Player X */}
